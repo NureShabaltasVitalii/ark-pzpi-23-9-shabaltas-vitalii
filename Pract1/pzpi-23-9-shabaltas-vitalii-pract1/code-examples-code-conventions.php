@@ -1,124 +1,215 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Examples;
 
-use Psr\Log\LoggerInterface;
-use App\Models\User;
 
-/**
- * Клас Example демонструє різні правила PSR-12
- */
+/*
+   3.2.1 Початок файлу: <?php та declare(strict_types=1);
+*/
+
+//  Поганий приклад
+<?php
+// ……
+// ?>
+
+//  Гарний приклад
+<?php
+declare(strict_types=1);
+
+namespace App\Services;
+
 class Example
 {
-    // -------------------------------------------
-    // 3.2.3 Відступи — чотири пробіли, не таби
-    // Погано:
-    // if ($a) {
-    // \tdoSomething();
-    // }
+    // ...
+}
 
-    // Добре:
-    public function indentExample($a)
+/* 
+   3.2.2 namespace і use — порядок і розташування
+*/
+
+//  Поганий приклад
+<?php
+use Psr\Log\LoggerInterface;
+namespace App\Controllers;
+
+class C { }
+
+//  Гарний приклад
+<?php
+declare(strict_types=1);
+
+namespace App\Controllers;
+
+use App\Models\User;
+use Psr\Log\LoggerInterface;
+
+class UserController
+{
+    // ...
+}
+
+/* 
+   3.2.3 Відступи — чотири пробіли, не таби
+*/
+
+//  Поганий приклад (із табами або змішаними відступами)
+if ($a) {
+	doSomething();
+}
+
+//  Гарний приклад
+if ($a) {
+    doSomething();
+}
+
+/* 
+   3.2.4 Розташування фігурних дужок
+*/
+
+//  Поганий приклад
+class A { public function foo(){return true;} }
+
+//  Гарний приклад
+class A
+{
+    public function foo()
     {
-        if ($a) {
-            doSomething(); // 4 пробіли для відступу
-        }
+        return true;
     }
+}
 
-    // -------------------------------------------
-    // 3.2.4 Фігурні дужки на новому рядку
-    // Погано:
-    // class A { public function foo(){return true;} }
+/*
+   3.2.5 Пробіли навколо операторів і після ком
+ */
 
-    // Добре:
-    public function bracesExample()
+//  Поганий приклад
+$a=1+$b;
+list($a,$b)=func();
+if($a&&$b){...}
+
+//  Гарний приклад
+$a = 1 + $b;
+list($a, $b) = func();
+if ($a && $b) {
+    // ...
+}
+
+/*
+   3.2.6 Коментарі та документація (PHPDoc)
+*/
+
+//  Поганий приклад
+class User {
+    public function getData($id) { /* ... */ }
+}
+
+//  Гарний приклад
+/**
+ * Клас користувача
+ */
+class UserGood
+{
+    /**
+     * Повертає дані користувача за його ID
+     *
+     * @param int $id Ідентифікатор користувача
+     * @return array Дані користувача
+     */
+    public function getData(int $id): array
     {
-        class A
-        {
-            public function foo()
-            {
-                return true;
-            }
-        }
-    }
-
-    // -------------------------------------------
-    // 3.2.5 Пробіли навколо операторів і після ком
-    // Погано:
-    // $a=1+$b;
-    // list($a,$b)=func();
-    // if($a&&$b){...}
-
-    // Добре:
-    public function spacingExample($a, $b)
-    {
-        $sum = $a + $b;
-        list($first, $second) = func();
-        if ($first && $second) {
-            // ...
-        }
-    }
-
-    // -------------------------------------------
-    // 3.2.6 Довжина рядка і розбиття виразів
-    public function longLineExample($service, $firstArgument, $secondArgument, $thirdArgument, $fourthArgument, $fifthArgument)
-    {
-        // Погано:
-        // $result = $service->doSomethingVeryLongName($firstArgument, $secondArgument, $thirdArgument, $fourthArgument, $fifthArgument);
-
-        // Добре:
-        $result = $service->doSomethingVeryLongName(
-            $firstArgument,
-            $secondArgument,
-            $thirdArgument,
-            $fourthArgument,
-            $fifthArgument
-        );
-    }
-
-    // -------------------------------------------
-    // 3.2.7 Іменування: класи, методи, змінні, константи
-    // Погано:
-    // class userprofile{ public function GET_userDATA($uid){ ... } }
-
-    // Добре:
-    public function namingExample(int $userId): array
-    {
-        class UserProfile
-        {
-            public function getUserData(int $userId): array
-            {
-                return [];
-            }
-        }
-
-        $userProfile = new UserProfile();
-        return $userProfile->getUserData($userId);
-    }
-
-    // -------------------------------------------
-    // 3.2.8 Сигнатури функцій/методів: типи, порядок, форматування
-    // Погано:
-    // function createUser($name,$email,$age=null){ /* ... */ }
-
-    // Добре:
-    public function createUser(string $name, string $email, ?int $age = null): User
-    {
-        return new User();
-    }
-
-    public function sendNotification(
-        User $user,
-        string $subject,
-        string $message,
-        ?\DateTimeImmutable $sendAt = null
-    ): void {
         // ...
     }
+}
 
-    // -------------------------------------------
-    // 3.2.9 Видимість та порядок членів класу
+/*
+   3.2.7 Кодування файлу та порожній рядок у кінці
+ */
+
+//  Поганий приклад
+<?php
+class ExampleBad { /* ... */ }   // немає порожнього рядка у кінці, файл може містити BOM
+//  Гарний приклад
+<?php
+class ExampleGood
+{
+    // ...
+}
+
+// (UTF-8 без BOM, один порожній рядок у кінці)
+
+/*
+   3.2.8 Довжина рядка і розбиття виразів
+ */
+
+//  Поганий приклад
+$result = $service->doSomethingVeryLongName($firstArgument,
+$secondArgument, $thirdArgument, $fourthArgument,
+$fifthArgument);
+
+//  Гарний приклад
+$result = $service->doSomethingVeryLongName(
+    $firstArgument,
+    $secondArgument,
+    $thirdArgument,
+    $fourthArgument,
+    $fifthArgument
+);
+
+/* 
+   3.2.9 Іменування: класи, методи, змінні, константи
+ */
+
+//  Поганий приклад
+class userprofile{
+    public function GET_userDATA($uid){ /* ... */ }
+}
+
+//  Гарний приклад
+class UserProfile
+{
+    public function getUserData(int $userId): array
+    {
+        // ...
+    }
+}
+
+/* 
+   3.2.10 Сигнатури функцій/методів: типи, порядок, форматування
+*/
+
+//  Поганий приклад
+function createUser($name,$email,$age=null){ /* ... */ }
+
+//  Гарний приклад
+function createUser(string $name, string $email, ?int $age = null): User
+{
+    // ...
+}
+
+//  Приклад довгої сигнатури
+public function sendNotification(
+    User $user,
+    string $subject,
+    string $message,
+    ?\DateTimeImmutable $sendAt = null
+): void {
+    // ...
+}
+
+/* 
+   3.2.11 Видимість та порядок членів класу
+ */
+
+//  Поганий приклад
+class A1 {
+    function do() {}
+    private $a;
+    public $b;
+}
+
+//  Гарний приклад
+class A2
+{
     public const DEFAULT_LIMIT = 10;
 
     private int $a;
@@ -143,36 +234,28 @@ class Example
     {
         // ...
     }
+}
 
-    // -------------------------------------------
-    // 3.2.10 Обробка помилок: винятки замість тихого повернення false/null
-    // Погано:
-    // function openFile(string $path) { $f = @fopen($path, 'r'); if ($f === false) { return false; } return $f; }
+/* 
+   3.2.12 Обробка помилок: винятки замість false/null
+*/
 
-    // Добре:
-    public function openFile(string $path)
-    {
-        $f = fopen($path, 'r');
-        if ($f === false) {
-            throw new \RuntimeException(sprintf('Не вдалося відкрити файл: %s', $path));
-        }
-        return $f;
+//  Поганий приклад
+function openFileBad(string $path) {
+    $f = @fopen($path, 'r');
+    if ($f === false) {
+        return false;
+    }
+    return $f;
+}
+
+//  Гарний приклад
+function openFileGood(string $path)
+{
+    $f = fopen($path, 'r');
+    if ($f === false) {
+        throw new \RuntimeException(sprintf('Не вдалося відкрити файл: %s', $path));
     }
 
-    // -------------------------------------------
-    // 3.2.11 Коментарі та документація (PHPDoc)
-    /**
-     * Повертає дані користувача за його ID
-     *
-     * @param int $id Ідентифікатор користувача
-     * @return array Дані користувача
-     */
-    public function getUserData(int $id): array
-    {
-        return [];
-    }
-
-    // -------------------------------------------
-    // 3.2.12 Кодування файлу та порожній рядок у кінці
-    // Всі файли мають бути UTF-8 без BOM та завершуватись одним порожнім рядком
+    return $f;
 }
